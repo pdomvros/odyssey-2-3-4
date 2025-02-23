@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ραψωδία β</title>
+    <title>Ραψωδία β: Ιθακησίων ἀγορά – Τηλέμαχου ἀποδημία</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             text-align: center;
@@ -21,34 +22,21 @@
             text-align: center;
             margin-top: 10px;
         }
-        .container {
-            position: relative;
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            height: 80vh;
-        }
-        .scene {
-            display: none;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            opacity: 0;
-        }
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 10px;
-        }
         .controls {
-            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            gap: 10px;
+        }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
-            margin: 5px;
             cursor: pointer;
             background-color: gold;
             color: black;
@@ -56,14 +44,58 @@
             border-radius: 5px;
             font-family: 'Comic Sans MS', cursive, sans-serif;
         }
+        button.small {
+            font-size: 12px;
+            padding: 5px 10px;
+            width: 100px;
+            margin-top: 5px;
+        }
         button:hover {
             background-color: #c9a200;
+        }
+        .container {
+            position: relative;
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            height: 80vh;
+            display: none;
+        }
+        .scene {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
     </style>
 </head>
 <body>
     <div class="author">Δημιουργία: Παναγιώτης Δόμβρος 2025 (CC BY-NC)</div>
-    <h1>Ραψωδία β</h1>
+    <h1>Ραψωδία β: Ιθακησίων ἀγορά – Τηλέμαχου ἀποδημία</h1>
+    
+    <div class="controls">
+        <div class="button-group">
+            <button onclick="showScene(1)">🔮 Προφητεία</button>
+            <button class="small" onclick="openSummary(1)">Περίληψη</button>
+        </div>
+        <div class="button-group">
+            <button onclick="showScene(2)">🏛 Συνέλευση</button>
+            <button class="small" onclick="openSummary(2)">Περίληψη</button>
+        </div>
+        <div class="button-group">
+            <button onclick="showScene(3)">🗣 Ο Μέντορας</button>
+            <button class="small" onclick="openSummary(3)">Περίληψη</button>
+        </div>
+        <div class="button-group">
+            <button onclick="showScene(4)">🙏 Προσευχή</button>
+            <button class="small" onclick="openSummary(4)">Περίληψη</button>
+        </div>
+        <div class="button-group">
+            <button onclick="showScene(5)">⛵ Αναχώρηση</button>
+            <button class="small" onclick="openSummary(5)">Περίληψη</button>
+        </div>
+    </div>
+    
     <div class="container">
         <img id="scene1" class="scene" src="scene1.png" alt="Προφητεία του Μάντη">
         <img id="scene2" class="scene" src="scene2.png" alt="Συνέλευση των Ιθακησίων">
@@ -72,65 +104,37 @@
         <img id="scene5" class="scene" src="scene5.png" alt="Η Αναχώρηση του Τηλέμαχου">
     </div>
     
-    <div class="controls">
-        <button onclick="showScene(1)">🔮 Προφητεία</button>
-        <button onclick="showScene(2)">🏛 Συνέλευση</button>
-        <button onclick="showScene(3)">🗣 Ο Μέντορας</button>
-        <button onclick="showScene(4)">🙏 Προσευχή</button>
-        <button onclick="showScene(5)">⛵ Αναχώρηση</button>
-    </div>
+    <button onclick="printPDF()">🖨 Εκτύπωση</button>
     
     <script>
         function showScene(sceneNumber) {
-            gsap.killTweensOf(".scene");
-            document.querySelectorAll(".scene").forEach(scene => {
-                gsap.to(scene, {opacity: 0, duration: 0.5, onComplete: () => {
-                    scene.style.display = "none";
-                }});
-            });
-            let sceneElement = document.getElementById("scene" + sceneNumber);
-            if (sceneElement) {
-                sceneElement.style.display = "block";
-                gsap.fromTo(sceneElement, {opacity: 0}, {opacity: 1, duration: 1});
-                openSummary(sceneNumber);
-            } else {
-                console.error("Scene not found: scene" + sceneNumber);
-            }
+            document.querySelector(".container").style.display = "block";
+            document.querySelectorAll(".scene").forEach(scene => scene.style.display = "none");
+            document.getElementById("scene" + sceneNumber).style.display = "block";
         }
         
         function openSummary(sceneNumber) {
             let summaries = [
-                "🔮 Ο μάντης Αλιθέρσης προφητεύει την επιστροφή του Οδυσσέα και την καταστροφή των μνηστήρων! 🦅✨",
-                "🏛 Ο Τηλέμαχος απευθύνεται στους Ιθακήσιους και ζητά δικαιοσύνη, αλλά οι μνηστήρες αντιδρούν! 💬⚔",
-                "🗣 Ο Μέντορας υπερασπίζεται τον Οδυσσέα, ενώ οι μνηστήρες χλευάζουν και γελούν! 🤨📢",
-                "🙏 Ο Τηλέμαχος προσεύχεται στην Αθηνά, η οποία εμφανίζεται ως Μέντορας για να τον καθοδηγήσει! 🌊⚡",
-                "⛵ Ο Τηλέμαχος αναχωρεί κρυφά από την Ιθάκη για να βρει νέα για τον πατέρα του! 🌌🚢"
+                "Ο μάντης Αλιθέρσης προφητεύει ότι ο Οδυσσέας θα επιστρέψει και οι μνηστήρες θα καταστραφούν.",
+                "Ο Τηλέμαχος ζητά βοήθεια από τους Ιθακήσιους, αλλά οι μνηστήρες τον χλευάζουν.",
+                "Ο Μέντορας υπερασπίζεται τον Οδυσσέα και κατακρίνει τους Ιθακήσιους που τον ξέχασαν.",
+                "Ο Τηλέμαχος προσεύχεται στην Αθηνά, η οποία του δίνει κουράγιο για το ταξίδι του.",
+                "Ο Τηλέμαχος αναχωρεί μυστικά από την Ιθάκη, ξεκινώντας το ταξίδι του για την Πύλο και τη Σπάρτη."
             ];
-            let summaryWindow = window.open("", "_blank", "width=400,height=300");
-            if (summaryWindow) {
-                summaryWindow.document.write(`
-                    <html>
-                    <head>
-                        <title>Περίληψη</title>
-                        <style>
-                            body { background-color: black; color: white; font-family: 'Comic Sans MS', cursive, sans-serif; text-align: center; }
-                            h1 { color: gold; }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>📜 Περίληψη 📜</h1>
-                        <p>${summaries[sceneNumber - 1]}</p>
-                    </body>
-                    </html>
-                `);
-            } else {
-                alert("Το αναδυόμενο παράθυρο αποκλείστηκε. Επιτρέψτε τα pop-ups και δοκιμάστε ξανά.");
-            }
+            alert(summaries[sceneNumber - 1]);
         }
         
-        document.addEventListener("DOMContentLoaded", () => {
-            showScene(1);
-        });
+        function printPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Ραψωδία β: Ιθακησίων ἀγορά – Τηλέμαχου ἀποδημία", 10, 10);
+            document.querySelectorAll(".scene").forEach((scene, index) => {
+                if (scene.style.display === "block") {
+                    doc.text(`${index + 1}. ${scene.alt}`, 10, 20 + index * 10);
+                }
+            });
+            doc.save("Ραψωδία_β.pdf");
+        }
     </script>
 </body>
 </html>
