@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ραψωδία β: Ιθακησίων ἀγορά – Τηλέμαχου ἀποδημία</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             text-align: center;
@@ -54,12 +52,6 @@
         button:hover {
             background-color: #c9a200;
         }
-        .print-button {
-            background-color: green;
-            color: white;
-            font-size: 18px;
-            margin-top: 20px;
-        }
         .container {
             position: relative;
             width: 80%;
@@ -74,6 +66,32 @@
             height: 100%;
             object-fit: contain;
         }
+        /* Στυλ για τα pop-up tabs */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border: 2px solid gold;
+            border-radius: 10px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+        .popup button {
+            margin-top: 10px;
+            background-color: gold;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -83,23 +101,23 @@
     <div class="controls">
         <div class="button-group">
             <button onclick="showScene(1)">🔮 Προφητεία</button>
-            <button class="small" onclick="openSummary(1)">Περίληψη</button>
+            <button class="small" onclick="openSummary(1)">📜 Περίληψη</button>
         </div>
         <div class="button-group">
             <button onclick="showScene(2)">🏛 Συνέλευση</button>
-            <button class="small" onclick="openSummary(2)">Περίληψη</button>
+            <button class="small" onclick="openSummary(2)">📜 Περίληψη</button>
         </div>
         <div class="button-group">
             <button onclick="showScene(3)">🗣 Ο Μέντορας</button>
-            <button class="small" onclick="openSummary(3)">Περίληψη</button>
+            <button class="small" onclick="openSummary(3)">📜 Περίληψη</button>
         </div>
         <div class="button-group">
             <button onclick="showScene(4)">🙏 Προσευχή</button>
-            <button class="small" onclick="openSummary(4)">Περίληψη</button>
+            <button class="small" onclick="openSummary(4)">📜 Περίληψη</button>
         </div>
         <div class="button-group">
             <button onclick="showScene(5)">⛵ Αναχώρηση</button>
-            <button class="small" onclick="openSummary(5)">Περίληψη</button>
+            <button class="small" onclick="openSummary(5)">📜 Περίληψη</button>
         </div>
     </div>
     
@@ -111,33 +129,37 @@
         <img id="scene5" class="scene" src="scene5.png" alt="Η Αναχώρηση του Τηλέμαχου">
     </div>
     
-    <button class="print-button" onclick="printScreen()">🖨 Εκτύπωση</button>
+    <!-- Pop-up για τις περιλήψεις -->
+    <div id="summaryPopup" class="popup">
+        <p id="summaryText"></p>
+        <button onclick="closeSummary()">Κλείσιμο ❌</button>
+    </div>
     
     <script>
+        // Εμφάνιση της κατάλληλης εικόνας
         function showScene(sceneNumber) {
-            document.querySelector(".container").style.display = "block";
-            document.querySelectorAll(".scene").forEach(scene => scene.style.display = "none");
-            document.getElementById("scene" + sceneNumber).style.display = "block";
+            const scenes = document.querySelectorAll('.scene');
+            scenes.forEach(scene => scene.style.display = 'none');
+            document.getElementById(`scene${sceneNumber}`).style.display = 'block';
+            document.querySelector('.container').style.display = 'block';
         }
-        
+
+        // Άνοιγμα pop-up με την περίληψη
         function openSummary(sceneNumber) {
             let summaries = [
-                "Ο μάντης Αλιθέρσης προφητεύει ότι ο Οδυσσέας θα επιστρέψει και οι μνηστήρες θα καταστραφούν.",
-                "Ο Τηλέμαχος ζητά βοήθεια από τους Ιθακήσιους, αλλά οι μνηστήρες τον χλευάζουν.",
-                "Ο Μέντορας υπερασπίζεται τον Οδυσσέα και κατακρίνει τους Ιθακήσιους που τον ξέχασαν.",
-                "Ο Τηλέμαχος προσεύχεται στην Αθηνά, η οποία του δίνει κουράγιο για το ταξίδι του.",
-                "Ο Τηλέμαχος αναχωρεί μυστικά από την Ιθάκη, ξεκινώντας το ταξίδι του για την Πύλο και τη Σπάρτη."
+                "🔮 Ο μάντης Αλιθέρσης προφητεύει ότι ο Οδυσσέας θα επιστρέψει και οι μνηστήρες θα καταστραφούν. 🌊⚔️",
+                "🏛 Ο Τηλέμαχος ζητά βοήθεια από τους Ιθακήσιους, αλλά οι μνηστήρες τον χλευάζουν. 😤👎",
+                "🗣 Ο Μέντορας υπερασπίζεται τον Οδυσσέα και κατακρίνει τους Ιθακήσιους που τον ξέχασαν. 🛡️⚖️",
+                "🙏 Ο Τηλέμαχος προσεύχεται στην Αθηνά, η οποία του δίνει κουράγιο για το ταξίδι του. 🕊️✨",
+                "⛵ Ο Τηλέμαχος αναχωρεί μυστικά από την Ιθάκη, ξεκινώντας το ταξίδι του για την Πύλο και τη Σπάρτη. 🌍🚤"
             ];
-            alert(summaries[sceneNumber - 1]);
+            document.getElementById('summaryText').innerHTML = summaries[sceneNumber - 1];
+            document.getElementById('summaryPopup').style.display = 'block';
         }
-        
-        function printScreen() {
-            html2canvas(document.querySelector("#capture-area")).then(canvas => {
-                let link = document.createElement("a");
-                link.href = canvas.toDataURL("image/png");
-                link.download = "screenshot.png";
-                link.click();
-            });
+
+        // Κλείσιμο του pop-up
+        function closeSummary() {
+            document.getElementById('summaryPopup').style.display = 'none';
         }
     </script>
 </body>
