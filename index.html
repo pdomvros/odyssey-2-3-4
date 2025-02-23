@@ -66,12 +66,12 @@
     <script>
         let currentScene = 1;
         function showScene(sceneNumber) {
-            gsap.to(".scene", {opacity: 0, duration: 0.5, onComplete: () => {
-                document.querySelectorAll(".scene").forEach(scene => scene.style.display = "none");
-                let sceneElement = document.getElementById("scene" + sceneNumber);
-                sceneElement.style.display = "block";
-                gsap.fromTo(sceneElement, {opacity: 0}, {opacity: 1, duration: 0.8});
-            }});
+            document.querySelectorAll(".scene").forEach(scene => {
+                scene.style.display = "none";
+            });
+            let sceneElement = document.getElementById("scene" + sceneNumber);
+            sceneElement.style.display = "block";
+            gsap.fromTo(sceneElement, {opacity: 0}, {opacity: 1, duration: 0.8});
         }
         
         document.addEventListener("DOMContentLoaded", () => {
@@ -80,4 +80,3 @@
     </script>
 </body>
 </html>
-
