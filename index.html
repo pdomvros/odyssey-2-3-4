@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ραψωδία β: Ιθακησίων ἀγορά – Τηλέμαχου ἀποδημία</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             text-align: center;
@@ -47,11 +47,18 @@
         button.small {
             font-size: 12px;
             padding: 5px 10px;
-            width: 100px;
-            margin-top: 5px;
+            width: 120px;
+            margin-top: 8px;
+            background-color: silver;
         }
         button:hover {
             background-color: #c9a200;
+        }
+        .print-button {
+            background-color: green;
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
         }
         .container {
             position: relative;
@@ -96,7 +103,7 @@
         </div>
     </div>
     
-    <div class="container">
+    <div class="container" id="capture-area">
         <img id="scene1" class="scene" src="scene1.png" alt="Προφητεία του Μάντη">
         <img id="scene2" class="scene" src="scene2.png" alt="Συνέλευση των Ιθακησίων">
         <img id="scene3" class="scene" src="scene3.png" alt="Ο Μέντορας υπερασπίζεται τον Οδυσσέα">
@@ -104,7 +111,7 @@
         <img id="scene5" class="scene" src="scene5.png" alt="Η Αναχώρηση του Τηλέμαχου">
     </div>
     
-    <button onclick="printPDF()">🖨 Εκτύπωση</button>
+    <button class="print-button" onclick="printScreen()">🖨 Εκτύπωση</button>
     
     <script>
         function showScene(sceneNumber) {
@@ -124,16 +131,13 @@
             alert(summaries[sceneNumber - 1]);
         }
         
-        function printPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text("Ραψωδία β: Ιθακησίων ἀγορά – Τηλέμαχου ἀποδημία", 10, 10);
-            document.querySelectorAll(".scene").forEach((scene, index) => {
-                if (scene.style.display === "block") {
-                    doc.text(`${index + 1}. ${scene.alt}`, 10, 20 + index * 10);
-                }
+        function printScreen() {
+            html2canvas(document.querySelector("#capture-area")).then(canvas => {
+                let link = document.createElement("a");
+                link.href = canvas.toDataURL("image/png");
+                link.download = "screenshot.png";
+                link.click();
             });
-            doc.save("Ραψωδία_β.pdf");
         }
     </script>
 </body>
