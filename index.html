@@ -81,8 +81,8 @@
     </div>
     
     <script>
-        let currentScene = 1;
         function showScene(sceneNumber) {
+            gsap.killTweensOf(".scene");
             document.querySelectorAll(".scene").forEach(scene => {
                 gsap.to(scene, {opacity: 0, duration: 0.5, onComplete: () => {
                     scene.style.display = "none";
@@ -92,23 +92,39 @@
             if (sceneElement) {
                 sceneElement.style.display = "block";
                 gsap.fromTo(sceneElement, {opacity: 0}, {opacity: 1, duration: 1});
-                addSceneAnimations(sceneNumber);
+                openSummary(sceneNumber);
             } else {
                 console.error("Scene not found: scene" + sceneNumber);
             }
         }
         
-        function addSceneAnimations(sceneNumber) {
-            if (sceneNumber === 1) {
-                gsap.fromTo("#scene1", {scale: 0.9}, {scale: 1, duration: 2, repeat: -1, yoyo: true});
-            } else if (sceneNumber === 2) {
-                gsap.fromTo("#scene2", {x: -50}, {x: 50, duration: 2, repeat: -1, yoyo: true});
-            } else if (sceneNumber === 3) {
-                gsap.fromTo("#scene3", {rotation: -2}, {rotation: 2, duration: 1.5, repeat: -1, yoyo: true});
-            } else if (sceneNumber === 4) {
-                gsap.fromTo("#scene4", {opacity: 0.8}, {opacity: 1, duration: 1.5, repeat: -1, yoyo: true});
-            } else if (sceneNumber === 5) {
-                gsap.fromTo("#scene5", {y: -10}, {y: 10, duration: 2, repeat: -1, yoyo: true});
+        function openSummary(sceneNumber) {
+            let summaries = [
+                "🔮 Ο μάντης Αλιθέρσης προφητεύει την επιστροφή του Οδυσσέα και την καταστροφή των μνηστήρων! 🦅✨",
+                "🏛 Ο Τηλέμαχος απευθύνεται στους Ιθακήσιους και ζητά δικαιοσύνη, αλλά οι μνηστήρες αντιδρούν! 💬⚔",
+                "🗣 Ο Μέντορας υπερασπίζεται τον Οδυσσέα, ενώ οι μνηστήρες χλευάζουν και γελούν! 🤨📢",
+                "🙏 Ο Τηλέμαχος προσεύχεται στην Αθηνά, η οποία εμφανίζεται ως Μέντορας για να τον καθοδηγήσει! 🌊⚡",
+                "⛵ Ο Τηλέμαχος αναχωρεί κρυφά από την Ιθάκη για να βρει νέα για τον πατέρα του! 🌌🚢"
+            ];
+            let summaryWindow = window.open("", "_blank", "width=400,height=300");
+            if (summaryWindow) {
+                summaryWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Περίληψη</title>
+                        <style>
+                            body { background-color: black; color: white; font-family: 'Comic Sans MS', cursive, sans-serif; text-align: center; }
+                            h1 { color: gold; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>📜 Περίληψη 📜</h1>
+                        <p>${summaries[sceneNumber - 1]}</p>
+                    </body>
+                    </html>
+                `);
+            } else {
+                alert("Το αναδυόμενο παράθυρο αποκλείστηκε. Επιτρέψτε τα pop-ups και δοκιμάστε ξανά.");
             }
         }
         
