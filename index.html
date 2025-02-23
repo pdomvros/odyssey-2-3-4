@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation - Οδύσσεια Ραψωδία β</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            position: relative;
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .scene {
+            display: none;
+            position: absolute;
+            width: 100%;
+            max-height: 80vh;
+        }
+        img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Οδύσσεια - Animation Ραψωδίας β</h1>
+    <div class="container">
+        <img id="scene1" class="scene" src="scene1.png" alt="Προφητεία του Μάντη">
+        <img id="scene2" class="scene" src="scene2.png" alt="Συνέλευση των Ιθακησίων">
+        <img id="scene3" class="scene" src="scene3.png" alt="Ο Μέντορας υπερασπίζεται τον Οδυσσέα">
+        <img id="scene4" class="scene" src="scene4.png" alt="Η Προσευχή του Τηλέμαχου">
+        <img id="scene5" class="scene" src="scene5.png" alt="Η Αναχώρηση του Τηλέμαχου">
+    </div>
+    
+    <div class="controls">
+        <button onclick="showScene(1)">🔮 Προφητεία</button>
+        <button onclick="showScene(2)">🏛 Συνέλευση</button>
+        <button onclick="showScene(3)">🗣 Ο Μέντορας</button>
+        <button onclick="showScene(4)">🙏 Προσευχή</button>
+        <button onclick="showScene(5)">⛵ Αναχώρηση</button>
+    </div>
+    
+    <script>
+        let currentScene = 1;
+        function showScene(sceneNumber) {
+            gsap.to(".scene", {opacity: 0, duration: 0.5, onComplete: () => {
+                document.querySelectorAll(".scene").forEach(scene => scene.style.display = "none");
+                let sceneElement = document.getElementById("scene" + sceneNumber);
+                sceneElement.style.display = "block";
+                gsap.fromTo(sceneElement, {opacity: 0}, {opacity: 1, duration: 0.8});
+            }});
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            showScene(1);
+        });
+    </script>
+</body>
+</html>
 
